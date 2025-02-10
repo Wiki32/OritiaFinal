@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const doneButton = document.getElementById("done-button");
     const inputField = document.querySelector("input");
 
-    const API_URL = "http://localhost:3000/names";
+    const API_URL = "https://oritiafinal.onrender.com"; // Update with the correct Render URL
 
     function showNotification(message) {
         const notification = document.createElement("div");
@@ -24,26 +24,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function checkName(name) {
-        const response = await fetch(`${API_URL}/${encodeURIComponent(name)}`);
-        if (!response.ok) return false;
-        const data = await response.json();
-        return data.exists;
+        try {
+            const response = await fetch(`${API_URL}/${encodeURIComponent(name)}`);
+            if (!response.ok) throw new Error("Error checking name");
+            const data = await response.json();
+            return data.exists;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            showNotification("Error checking name. Please try again.");
+            return false;
+        }
     }
 
     async function addName(name) {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name }),
-        });
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name }),
+            });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            showNotification(errorData.message || "An error occurred.");
+            if (!response.ok) {
+                const errorData = await response.json();
+                showNotification(errorData.message || "An error occurred.");
+                return null;
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Error adding name:", error);
+            showNotification("Error adding name. Please try again.");
             return null;
         }
-
-        return await response.json();
     }
 
     if (doneButton) {
@@ -54,10 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            showNotification("Checking name...");
             const exists = await checkName(userInput);
 
             if (exists) {
-                alert(`The name ${userInput} is in the database.`);
+                showNotification(`The name ${userInput} is in the database.`);
             } else {
                 const result = await addName(userInput);
                 if (result) {
@@ -67,6 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Ensure the default theme is applied
+    document.body.classList.add("light-theme");
+});
 
     // Ensure the default theme is applied
     document.body.classList.add("light-theme");
