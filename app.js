@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const doneButton = document.getElementById("done-button");
     const inputField = document.querySelector("input");
 
-    const API_URL = "https://oritiafinal.onrender.com"; // Update with the correct Render URL
+    const API_URL = "https://oritiafinal.onrender.com"; 
 
     function showNotification(message) {
         const notification = document.createElement("div");
