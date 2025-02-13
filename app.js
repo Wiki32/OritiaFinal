@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const doneButton = document.getElementById("done-button");
     const inputField = document.querySelector("input");
 
-    const API_URL = "https://oritiafinal.onrender.com/names/"; 
+    const API_URL = "https://oritiafinal.onrender.com/names"; // Corrected API URL
 
     function showNotification(message) {
         const notification = document.createElement("div");
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         notification.style.borderRadius = "10px";
         notification.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
         notification.style.fontSize = "16px";
+        notification.style.zIndex = "1000";
         document.body.appendChild(notification);
 
         setTimeout(() => {
@@ -79,10 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
-    // Ensure the default theme is applied
-    document.body.classList.add("light-theme");
-});
 
     // Ensure the default theme is applied
     document.body.classList.add("light-theme");
